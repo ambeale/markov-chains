@@ -51,12 +51,13 @@ def make_chains(text_string):
 
     for i, word in enumerate(word_list):
 
-    	# prevent out of range indexing
-    	if i == len(word_list)-2:
-    		break
-
     	# current key tuple
     	temp_key = (word, word_list[i+1])
+
+    	# prevent out of range indexing
+    	if i == len(word_list)-2:
+    		chains[temp_key] = None
+    		break
 
     	# add next value to dictionary
     	if temp_key in chains:
@@ -81,8 +82,11 @@ def make_text(chains):
     key = start_point
     
     while True:
-    	# use a try catch block to catch the KeyError
-    	try:
+    	# add words to list
+    	if chains[key] == None:
+    		# at end of text
+    		break
+    	else:
     		# choose new link
     		link = choice(chains[key])
 
@@ -91,9 +95,6 @@ def make_text(chains):
 
     		# create next key
     		key = (key[1],link)
-    	except:
-    		# end new text
-    		break
 
     return " ".join(words)
 
