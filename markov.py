@@ -47,6 +47,25 @@ def make_chains(text_string):
 
     # your code goes here
 
+    word_list = text_string.split()
+
+    for i, word in enumerate(word_list):
+
+    	# prevent out of range indexing
+    	if i == len(word_list)-2:
+    		break
+
+    	# current key tuple
+    	temp_key = (word, word_list[i+1])
+
+    	# add next value to dictionary
+    	if temp_key in chains:
+    		# already in dict, only add follwing word
+    		chains[temp_key].append(word_list[i+2])
+    	else:
+    		# not in dict, add both key and following word
+    		chains[temp_key] = [word_list[i+2]]
+
     return chains
 
 
@@ -65,8 +84,8 @@ input_path = "green-eggs.txt"
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
-# # Get a Markov chain
-# chains = make_chains(input_text)
+# Get a Markov chain
+chains = make_chains(input_text)
 
 # # Produce random text
 # random_text = make_text(chains)
