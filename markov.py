@@ -13,7 +13,7 @@ def open_and_read_file(file_path):
     # your code goes here
 
     with open(file_path, 'r') as f:
-    	file_text = f.read()
+        file_text = f.read()
 
     return file_text
 
@@ -50,33 +50,33 @@ def make_chains(text_string, n):
     word_list = text_string.split()
 
     for i, word in enumerate(word_list):
-    	# init list that will become key tuple
-    	create_tuple = []
+        # init list that will become key tuple
+        create_tuple = []
 
-    	# grabbing n words for n-gram
-    	for j in range(i,i+n):
-    		create_tuple.append(word_list[j])
+        # grabbing n words for n-gram
+        for j in range(i,i+n):
+            create_tuple.append(word_list[j])
 
-    	# current key tuple
-    	temp_key = tuple(create_tuple)
+        # current key tuple
+        temp_key = tuple(create_tuple)
 
-    	# prevent out of range indexing
-    	if i == len(word_list)-n:
-    		chains[temp_key] = None
-    		break
+        # prevent out of range indexing
+        if i == len(word_list)-n:
+            chains[temp_key] = None
+            break
 
-    	# add next value to dictionary
-    	if temp_key in chains:
-    		# already in dict, only add follwing word
-    		chains[temp_key].append(word_list[i+n])
-    	else:
-    		# not in dict, add both key and following word
-    		chains[temp_key] = [word_list[i+n]]
+        # add next value to dictionary
+        if temp_key in chains:
+            # already in dict, only add follwing word
+            chains[temp_key].append(word_list[i+n])
+        else:
+            # not in dict, add both key and following word
+            chains[temp_key] = [word_list[i+n]]
 
     return chains
 
 
-def make_text(chains):
+def make_text(chains, n):
     """Return text from chains."""
 
     # Init words list
@@ -88,32 +88,41 @@ def make_text(chains):
     key = start_point
     
     while True:
-    	# add words to list
-    	if chains[key] == None:
-    		# at end of text
-    		break
-    	else:
-    		# choose new link
-    		link = choice(chains[key])
+        # add words to list
+        if chains[key] == None:
+            # at end of text
+            break
+        else:
+            # choose new link
+            link = choice(chains[key])
 
-    		# add new link to words
-    		words.append(link)
+            # add new link to words
+            words.append(link)
 
-    		# create next key
-    		key = (key[1],link)
+            # create next key; init list to turn into tuple
+            temp_key_list = []
+
+            # build list with last n words
+            for i, word in enumerate(key):
+                if i > 0:
+                    temp_key_list.append(word)
+
+            # create new key
+            temp_key_list.append(link)
+            key = tuple(temp_key_list)
 
     return " ".join(words)
 
 
 input_path = sys.argv[2]
+n = int(sys.argv[1])
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-chains = make_chains(input_text, int(sys.argv[1]))
-print(chains)
+chains = make_chains(input_text, n)
 
 # Produce random text
-# random_text = make_text(chains)
-# print(random_text)
+random_text = make_text(chains, n)
+print(random_text)
