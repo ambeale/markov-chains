@@ -12,7 +12,10 @@ def open_and_read_file(file_path):
 
     # your code goes here
 
-    return "Contents of your file as one long string"
+    with open(file_path, 'r') as f:
+    	file_text = f.read()
+
+    return file_text
 
 
 def make_chains(text_string):
@@ -62,10 +65,10 @@ input_path = "green-eggs.txt"
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
-# Get a Markov chain
-chains = make_chains(input_text)
+# # Get a Markov chain
+# chains = make_chains(input_text)
 
-# Produce random text
-random_text = make_text(chains)
+# # Produce random text
+# random_text = make_text(chains)
 
-print random_text
+# print random_text
