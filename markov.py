@@ -112,12 +112,18 @@ def make_text(chains, n):
     return " ".join(words)
 
 
+# assign variables to standard inputs
 n = int(sys.argv[1])
 input1 = sys.argv[2]
-input2 = sys.argv[3]
 
-# Open the file and turn it into one long string
-input_text = open_and_read_file(input1) + open_and_read_file(input2)
+# get file(s) text
+try:
+    # Open two files and turn them into one long string
+    input2 = sys.argv[3]
+    input_text = open_and_read_file(input1) + open_and_read_file(input2)
+except:
+    # Open the file and turn it into one long string
+    input_text = open_and_read_file(input1)
 
 # Get a Markov chain
 chains = make_chains(input_text, n)
