@@ -15,6 +15,11 @@ def open_and_read_file(file_path):
     with open(file_path, 'r') as f:
         file_text = f.read()
 
+    # if corpus does not end in punctuation, append new random punctuation
+    if file_text[-1] not in ["?",".","!"]:
+        file_text = file_text.rstrip()
+        file_text += choice(["?",".","!"])
+
     return file_text
 
 
@@ -74,6 +79,20 @@ def make_chains(text_string, n):
     return chains
 
 
+def get_new_key(link, old_key):
+    """create next key; init list to turn into tuple"""
+
+    temp_key_list = []
+
+    # build list with last n words
+    for i, word in enumerate(old_key):
+        if i > 0:
+            temp_key_list.append(word)
+
+    # create new key
+    temp_key_list.append(link)
+    return tuple(temp_key_list)
+
 def make_text(chains, n):
     """Return text from chains."""
 
@@ -82,14 +101,30 @@ def make_text(chains, n):
 
     # Start words list
     start_point = choice(list(chains.keys()))
+    while not start_point[0][0].isupper():
+        start_point = choice(list(chains.keys()))
+
     words.extend(start_point)
     key = start_point
     
+    # add words to list
     while True:
-        # add words to list
         if chains[key] == None:
-            # at end of text
+            # end of Markov chain
             break
+        
+        elif len(" ".join(words)) > 130:
+            # choose new link
+            link = choice(chains[key])
+
+            # add new link to word if ends in punctuation; else pick new key
+            if link[-1] in ["?",".","!"]:
+                words.append(link)
+                break
+            else:
+                # choose a new key
+                key = get_new_key(link, key)
+
         else:
             # choose new link
             link = choice(chains[key])
@@ -97,17 +132,8 @@ def make_text(chains, n):
             # add new link to words
             words.append(link)
 
-            # create next key; init list to turn into tuple
-            temp_key_list = []
-
-            # build list with last n words
-            for i, word in enumerate(key):
-                if i > 0:
-                    temp_key_list.append(word)
-
-            # create new key
-            temp_key_list.append(link)
-            key = tuple(temp_key_list)
+            # choose a new key
+            key = get_new_key(link, key)
 
     return " ".join(words)
 
