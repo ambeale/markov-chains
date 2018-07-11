@@ -45,8 +45,6 @@ def make_chains(text_string, n):
 
     chains = {}
 
-    # your code goes here
-
     word_list = text_string.split()
 
     for i, word in enumerate(word_list):
@@ -114,11 +112,12 @@ def make_text(chains, n):
     return " ".join(words)
 
 
-input_path = sys.argv[2]
 n = int(sys.argv[1])
+input1 = sys.argv[2]
+input2 = sys.argv[3]
 
 # Open the file and turn it into one long string
-input_text = open_and_read_file(input_path)
+input_text = open_and_read_file(input1) + open_and_read_file(input2)
 
 # Get a Markov chain
 chains = make_chains(input_text, n)
