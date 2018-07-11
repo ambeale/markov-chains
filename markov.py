@@ -10,8 +10,6 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    # your code goes here
-
     with open(file_path, 'r') as f:
         file_text = f.read()
 
@@ -80,7 +78,7 @@ def make_chains(text_string, n):
 
 
 def get_new_key(link, old_key):
-    """create next key; init list to turn into tuple"""
+    """Create next key; return tuple of new key"""
 
     temp_key_list = []
 
@@ -113,7 +111,8 @@ def make_text(chains, n):
             # end of Markov chain
             break
         
-        elif len(" ".join(words)) > 130:
+        # set max number of characters
+        elif len(" ".join(words)) > 500:
             # choose new link
             link = choice(chains[key])
 
@@ -138,17 +137,15 @@ def make_text(chains, n):
     return " ".join(words)
 
 
-# assign variables to standard inputs
+# assign variables to standard inputs (n value and at least one input file required)
 n = int(sys.argv[1])
 input1 = sys.argv[2]
 
-# get file(s) text
+# If two files, open both and combine the strings. Else, open one file.
 try:
-    # Open two files and turn them into one long string
     input2 = sys.argv[3]
     input_text = open_and_read_file(input1) + open_and_read_file(input2)
 except:
-    # Open the file and turn it into one long string
     input_text = open_and_read_file(input1)
 
 # Get a Markov chain
